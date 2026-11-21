@@ -119,10 +119,9 @@ function openAdmin(){
  document.getElementById('sv').onclick=save;
 }
 function thumbs(){var t=document.getElementById('th');t.innerHTML=D.photos.map(function(p,i){return'<div><img src="'+p+'"><b data-i="'+i+'">×</b></div>'}).join('');t.querySelectorAll('b').forEach(function(b){b.onclick=function(){D.photos.splice(+b.dataset.i,1);thumbs()}})}
-var SITE=location.origin;
 function mailBody(l,n,t){var nm=CFG.name;
- if(l==="fr")return["Découvrez "+nm,"Bonjour "+n+",\n\n"+(t?t+"\n\n":"")+"Merci de votre intérêt pour "+nm+". Voici notre page avec nos services et nos coordonnées :\n\n"+SITE+"\n\nCordialement,\n"+nm];
- return["Discover "+nm,"Hello "+n+",\n\n"+(t?t+"\n\n":"")+"Thank you for your interest in "+nm+". Here is our page with our services and contact details:\n\n"+SITE+"\n\nBest regards,\n"+nm]}
+ if(l==="fr")return["Message de "+nm,"Bonjour "+n+",\n\n"+(t?t:"Merci de votre intérêt pour "+nm+". Nous serons heureux de vous aider.")+"\n\nCordialement,\n"+nm];
+ return["Message from "+nm,"Hello "+n+",\n\n"+(t?t:"Thank you for your interest in "+nm+". We would be happy to help.")+"\n\nBest regards,\n"+nm]}
 async function sendMail(l){var m=document.getElementById("mm"),e=val("me");
  if(!e){m.style.color="#c0392b";m.textContent="Enter the client email";return}
  var p=document.getElementById("mp").files[0],att=[];
