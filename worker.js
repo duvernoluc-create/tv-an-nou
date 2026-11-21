@@ -20,9 +20,11 @@ export default {
         return new Response("Mailjet is not configured. Add MAILJET_API_KEY, MAILJET_SECRET_KEY, and MAILJET_FROM_EMAIL in Cloudflare Worker Secrets/Variables.", { status: 500 });
       }
       const cfg = JSON.parse((await env.KV.get("cfg")) || "{}");
-      const logo = cfg.logo && cfg.logo.startsWith("data:image/") ? cfg.logo : "";
-      const logoHtml = logo ? `<img src="${logo}" alt="${esc(cfg.name||"")}" style="max-width:180px;max-height:80px;display:block;margin:0 auto 20px">` : "";
-      const html = `<div style="font-family:Arial,sans-serif;max-width:620px;margin:auto;color:#202938;padding:24px">${logoHtml}<h2 style="text-align:center;color:#0b4fd1">${esc(cfg.name||"TV An Nou")}</h2><div style="white-space:pre-line;line-height:1.6">${esc(b.text||"")}</div><hr style="border:0;border-top:1px solid #ddd;margin:24px 0"><p style="font-size:13px;color:#667085;text-align:center">Sent by ${esc(cfg.name||"TV An Nou")} · <a href="${esc(new URL("/",req.url).href)}">Visit our website</a></p></div>`;
+      const nm = esc(cfg.name || "TV An Nou");
+      const m = /^data:(image\/[\w.+-]+);base64,([\s\S]+)$/.exec(cfg.logo || "");
+      const logoHtml = m ? `<div style="text-align:center;padding:8px 0 28px"><img src="cid:logo" alt="${nm}" width="180" style="display:inline-block;max-width:180px;height:auto;border:0"></div>` : "";
+      const body = esc(b.text || "").replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" style="color:#0b4fd1">$1</a>');
+      const html = `<div style="background:#f4f6f9;padding:32px 12px"><div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:auto;background:#ffffff;border-radius:10px;padding:36px 32px;color:#202938"><div style="height:4px;background:#0b4fd1;border-radius:4px;margin:-36px -32px 32px"></div>${logoHtml}<div style="white-space:pre-line;font-size:16px;line-height:1.7">${body}</div></div></div>`;
       const attachments = Array.isArray(b.attachments) ? b.attachments.map(a => ({
         ContentType: a.contentType || "image/jpeg",
         Filename: a.filename || "photo.jpg",
@@ -36,6 +38,7 @@ export default {
         HTMLPart: html
       };
       if (attachments.length) message.Attachments = attachments;
+      if (m) message.InlinedAttachments = [{ ContentType: m[1], Filename: "logo", ContentID: "logo", Base64Content: m[2] }];
       const r = await fetch("https://api.mailjet.com/v3.1/send", {
         method: "POST",
         headers: {
