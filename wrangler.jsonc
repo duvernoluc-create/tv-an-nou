@@ -1,0 +1,7 @@
+{
+  "name": "tv-an-nou",
+  "main": "worker.js",
+  "compatibility_date": "2026-11-01",
+  "assets": { "directory": "./public", "run_worker_first": ["/api/*"] },
+  "kv_namespaces": [{ "binding": "KV" }]
+}
