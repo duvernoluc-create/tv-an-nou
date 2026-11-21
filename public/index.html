@@ -29,7 +29,9 @@ section{margin:0 0 44px}
 .contact{background:var(--soft);border-radius:16px;padding:24px;display:grid;gap:8px}
 .contact a{color:var(--p);font-weight:600;text-decoration:none}
 footer{text-align:center;color:#6b7683;font-size:14px;padding:24px 0 40px}
-#editbtn,#mailbtn{position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:20;background:var(--tx);color:#fff;border:0;border-radius:999px;padding:12px 18px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px #0004;display:none}
+#editbtn,#mailbtn{position:fixed;right:16px;z-index:20;background:var(--tx);color:#fff;border:0;border-radius:999px;padding:12px 18px;font-weight:700;cursor:pointer;box-shadow:0 4px 14px #0004}
+#editbtn{bottom:calc(16px + env(safe-area-inset-bottom,0px));display:block}
+#mailbtn{bottom:calc(70px + env(safe-area-inset-bottom,0px));display:none;background:var(--a)}
 #admin{position:fixed;inset:0;background:#000a;z-index:30;display:none;overflow:auto;padding:16px}
 #admin .panel{background:#fff;color:#1b2430;max-width:640px;margin:0 auto;border-radius:16px;padding:20px}
 .panel h3{margin:18px 0 8px;font-size:16px}.panel label{display:block;font-size:13px;color:#59636f;margin-top:8px}
@@ -85,7 +87,7 @@ function render(){
  if(CFG.phone)h+='<div>📞 <a href="tel:'+esc(CFG.phone)+'">'+esc(CFG.phone)+'</a></div>';
  if(CFG.email)h+='<div>✉️ <a href="mailto:'+esc(CFG.email)+'">'+esc(CFG.email)+'</a></div>';
  if(CFG.address)h+='<div>📍 '+esc(CFG.address)+'</div>';
- h+='</div></section><footer>© '+new Date().getFullYear()+' '+esc(CFG.name)+' · <a href="#" id="adm" style="color:inherit">Admin</a></footer>';
+ h+='</div></section><footer>© '+new Date().getFullYear()+' '+esc(CFG.name)+' · <a href="#" id="adm" style="color:var(--p);font-weight:800;text-decoration:underline">Admin / Gérer le site</a></footer>';
  document.getElementById('app').innerHTML=h;
  document.getElementById('editbtn').textContent=u.edit;
  document.getElementById('adm').onclick=function(e){e.preventDefault();adminLogin()};
@@ -135,7 +137,7 @@ function openMail(){var a=document.getElementById("admin");
  document.getElementById("mx").onclick=function(){a.style.display="none";a.innerHTML=""}}
 function lines(s){return s.split('\n').map(function(x){return x.trim()}).filter(Boolean)}
 var PW="";
-function showBtns(){var b=document.getElementById("editbtn"),m=document.getElementById("mailbtn");b.style.display="block";b.onclick=openAdmin;m.textContent="✉ Send to client";m.style.display="block";m.onclick=openMail}
+function showBtns(){var b=document.getElementById("editbtn"),m=document.getElementById("mailbtn");b.style.display="block";b.textContent="🔐 Admin / Edit site";b.onclick=openAdmin;m.textContent="✉ Send email to client";m.style.display="block";m.onclick=openMail}
 function adminLogin(){if(OWNER){openAdmin();return}
  var p=prompt("Admin password / Mot de passe admin");if(!p)return;
  fetch("/api/auth",{method:"POST",body:JSON.stringify({password:p})}).then(function(r){
