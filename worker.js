@@ -23,8 +23,8 @@ export default {
       const nm = esc(cfg.name || "TV An Nou");
       const m = /^data:(image\/[\w.+-]+);base64,([\s\S]+)$/.exec(cfg.logo || "");
       const logoHtml = m ? `<div style="text-align:center;padding:8px 0 28px"><img src="cid:logo" alt="${nm}" width="180" style="display:inline-block;max-width:180px;height:auto;border:0"></div>` : "";
-      const body = esc(b.text || "").replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" style="color:#0b4fd1">$1</a>');
-      const html = `<div style="background:#f4f6f9;padding:32px 12px"><div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:auto;background:#ffffff;border-radius:10px;padding:36px 32px;color:#202938"><div style="height:4px;background:#0b4fd1;border-radius:4px;margin:-36px -32px 32px"></div>${logoHtml}<div style="white-space:pre-line;font-size:16px;line-height:1.7">${body}</div></div></div>`;
+      const msgHtml = esc(b.text || "").replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" style="color:#0b4fd1">$1</a>');
+      const html = `<div style="background:#f4f6f9;padding:32px 12px"><div style="font-family:Arial,Helvetica,sans-serif;max-width:560px;margin:auto;background:#ffffff;border-radius:10px;padding:36px 32px;color:#202938"><div style="height:4px;background:#0b4fd1;border-radius:4px;margin:-36px -32px 32px"></div>${logoHtml}<div style="white-space:pre-line;font-size:16px;line-height:1.7">${msgHtml}</div></div></div>`;
       const attachments = Array.isArray(b.attachments) ? b.attachments.map(a => ({
         ContentType: a.contentType || "image/jpeg",
         Filename: a.filename || "photo.jpg",
