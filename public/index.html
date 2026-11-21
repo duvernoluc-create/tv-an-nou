@@ -124,10 +124,10 @@ function mailBody(l,n,t){var nm=CFG.name;
 async function sendMail(l){var m=document.getElementById("mm"),e=val("me");
  if(!e){m.style.color="#c0392b";m.textContent="Enter the client email";return}
  var p=document.getElementById("mp").files[0],att=[];
- if(p){var d=await img(p,1400,"image/jpeg");att=[{filename:"photo.jpg",content:d.split(",")[1]}]}
+ if(p){var d=await img(p,1400,"image/jpeg");att=[{filename:p.name||"photo.jpg",content:d.split(",")[1]}]}
  var s=mailBody(l,val("mn"),val("mt"));m.style.color="#59636f";m.textContent="Sending…";
- try{var r=await fetch("/api/send",{method:"POST",body:JSON.stringify({password:PW,to:e,subject:s[0],text:s[1],attachments:att})});
-  var j=await r.text();if(r.ok){m.style.color="#1a8a3a";m.textContent="✓ Sent!"}else{m.style.color="#c0392b";m.textContent="Error: "+j}}
+ try{var r=await fetch("/api/send",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({password:PW,to:e,subject:s[0],text:s[1],attachments:att})});
+  var j=await r.text();if(r.ok){m.style.color="#1a8a3a";m.textContent="✓ Email sent successfully!"}else{m.style.color="#c0392b";m.textContent="Error: "+j}}
  catch(x){m.style.color="#c0392b";m.textContent="Network error"}}
 function openMail(){var a=document.getElementById("admin");
  a.innerHTML='<div class="panel"><h2>✉ Send to client / Envoyer au client</h2><label>Client name / Nom</label><input type="text" id="mn"><label>Client email</label><input type="text" id="me" placeholder="client@email.com"><label>Note / Message</label><textarea id="mt" placeholder="Optional"></textarea><label>📷 Photo (optional)</label><input type="file" id="mp" accept="image/*"><div class="row" style="margin-top:16px"><button class="save" id="g1">Send in English</button><button class="save" id="g2" style="background:var(--a)">Envoyer en français</button></div><p id="mm" style="font-size:14px;min-height:20px"></p><button class="cancel" id="mx">Close</button></div>';
